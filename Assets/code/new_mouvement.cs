@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class mouvement : MonoBehaviour
+public class new_mouvement : MonoBehaviour
 {
     public float speed = 10f; // Speed of the character
     public float jumpForce = 5f; // Force applied for jumping
@@ -38,7 +38,7 @@ public class mouvement : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // Prevent double jumps
         }
-        if (Input.GetAxis  && !cooldown) // Check for sprint input (Shift key) and if cooldown is not active
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !cooldown) // Check for sprint input (Shift key) and if cooldown is not active
         {
            
             sprint = true; // Start sprinting
