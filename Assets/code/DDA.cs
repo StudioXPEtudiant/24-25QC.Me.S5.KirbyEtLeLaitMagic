@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Attack : MonoBehaviour
+public class attack : MonoBehaviour
 {
     public int normalAttackDamage = 5; // Damage dealt by the normal attack
     public int slashAttackDamage = 20; // Damage dealt by the slash attack

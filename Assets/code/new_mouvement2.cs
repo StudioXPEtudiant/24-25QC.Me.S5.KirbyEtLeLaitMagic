@@ -1,0 +1,80 @@
+using UnityEngine;
+
+
+public class new_mouvement2 : MonoBehaviour
+{
+    public float speed = 10f; // Speed of the character
+    public float jumpForce = 5f; // Force applied for jumping
+    private Rigidbody rb; // Reference to the Rigidbody component
+    private bool isGrounded = true; // Check if the character is on the ground
+    public float sprint_timer ; 
+    float sprint_time = 0f; // Time spent sprinting
+    bool sprint = false;
+    float cooldown_timer;
+    float cooldown_time;
+    bool cooldown = false; // Check if cooldown is active 
+
+    void Start()
+    {
+        // Get the Rigidbody component attached to the character
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        // Get input from arrow keys
+        float horizontal = Input.GetAxis("Horizontal"); // Left/Right
+        float vertical = Input.GetAxis("Vertical");     // Up/Down
+
+        // Create a movement vector
+        Vector3 movement = new Vector3(horizontal, 0f, vertical);
+
+        // Apply movement to the character
+        transform.Translate(movement * speed * Time.deltaTime, Space.World);
+
+        // Check for jump input (Up arrow key) and if the character is grounded
+        if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false; // Prevent double jumps
+        }
+        if (Input.GetKeyDown(KeyCode.RightShift) && !cooldown) // Check for sprint input (Right Shift key) and if cooldown is not active
+        {
+            sprint = true; // Start sprinting
+        }
+
+        if (sprint)
+        {
+            speed = 20f; // Increase speed when sprinting
+            sprint_time -= Time.deltaTime; // Decrease sprint time
+            if (sprint_time <= 0f)
+            {
+                cooldown = true; // Start cooldown when sprint time runs out
+                sprint = false; // Stop sprinting when time runs out
+                sprint_time = sprint_timer; // Reset to normal speed 
+                speed = 10f; // Reset to normal speed
+            }
+        }
+        if (cooldown)
+        {
+            cooldown_time -= Time.deltaTime; // Decrease cooldown time
+            if (cooldown_time <= 0f)
+            {
+                cooldown = false; // Stop cooldown when time runs out
+                cooldown_time = cooldown_timer; // Reset to normal speed 
+            }
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the character is touching the ground
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+}
+
+
+
