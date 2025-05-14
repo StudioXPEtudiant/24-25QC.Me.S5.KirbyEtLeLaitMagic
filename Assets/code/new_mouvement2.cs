@@ -1,11 +1,11 @@
 using UnityEngine;
 
 
-public class new_mouvement2 : MonoBehaviour
+public class new_mouvement : MonoBehaviour
 {
     public float speed = 10f; // Speed of the character
     public float jumpForce = 5f; // Force applied for jumping
-    private Rigidbody rb; // Reference to the Rigidbody component
+    private Rigidbody2D rb; // Reference to the Rigidbody component
     private bool isGrounded = true; // Check if the character is on the ground
     public float sprint_timer ; 
     float sprint_time = 0f; // Time spent sprinting
@@ -17,32 +17,35 @@ public class new_mouvement2 : MonoBehaviour
     void Start()
     {
         // Get the Rigidbody component attached to the character
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
+        if(rb == null)
+            Debug.Log("no rb"); 
     }
 
     void Update()
     {
-        // Get input from arrow keys
-        float horizontal = Input.GetAxis("Horizontal"); // Left/Right
-        float vertical = Input.GetAxis("Vertical");     // Up/Down
+        // Get input from WASD keys or arrow keys
+        float horizontal = Input.GetAxis("Horizontal P2"); // A/D or Left/Right
+        float vertical = Input.GetAxis("Vertical P2");     // W/S or Up/Down
 
         // Create a movement vector
-        Vector3 movement = new Vector3(horizontal, 0f, vertical);
+        Vector2 movement = new Vector2(horizontal, vertical);
 
         // Apply movement to the character
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
 
-        // Check for jump input (Up arrow key) and if the character is grounded
-        if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
+        // Check for jump input (Spacebar) and if the character is grounded
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false; // Prevent double jumps
         }
-        if (Input.GetKeyDown(KeyCode.RightShift) && !cooldown) // Check for sprint input (Right Shift key) and if cooldown is not active
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !cooldown) // Check for sprint input (Shift key) and if cooldown is not active
         {
+           
             sprint = true; // Start sprinting
         }
-
+       
         if (sprint)
         {
             speed = 20f; // Increase speed when sprinting
@@ -75,6 +78,6 @@ public class new_mouvement2 : MonoBehaviour
         }
     }
 }
-
-
-
+    
+    
+    

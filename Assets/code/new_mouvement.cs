@@ -5,7 +5,7 @@ public class new_mouvement : MonoBehaviour
 {
     public float speed = 10f; // Speed of the character
     public float jumpForce = 5f; // Force applied for jumping
-    private Rigidbody rb; // Reference to the Rigidbody component
+    private Rigidbody2D rb; // Reference to the Rigidbody component
     private bool isGrounded = true; // Check if the character is on the ground
     public float sprint_timer ; 
     float sprint_time = 0f; // Time spent sprinting
@@ -17,7 +17,9 @@ public class new_mouvement : MonoBehaviour
     void Start()
     {
         // Get the Rigidbody component attached to the character
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
+        if(rb == null)
+            Debug.Log("no rb"); 
     }
 
     void Update()
@@ -27,7 +29,7 @@ public class new_mouvement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");     // W/S or Up/Down
 
         // Create a movement vector
-        Vector3 movement = new Vector3(horizontal, 0f, vertical);
+        Vector2 movement = new Vector2(horizontal, vertical);
 
         // Apply movement to the character
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
@@ -35,7 +37,7 @@ public class new_mouvement : MonoBehaviour
         // Check for jump input (Spacebar) and if the character is grounded
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false; // Prevent double jumps
         }
         if (Input.GetKeyDown(KeyCode.LeftShift) && !cooldown) // Check for sprint input (Shift key) and if cooldown is not active
